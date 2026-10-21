@@ -1,0 +1,50 @@
+name: Update Server version metadata
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Published release tag (for example v2.16.0)'
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+    secrets:
+      SERVER_UPDATE_TOKEN:
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: server-version-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Download published release and source metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: bash .github/scripts/download-release.sh
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: StillPCL/PCL2_CE_Server
+          ref: main
+          path: server
+          token: ${{ secrets.SERVER_UPDATE_TOKEN }}
+      - run: python3 .github/scripts/update-server.py
+      - name: Commit Server version metadata
+        working-directory: server
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- apiv2/updates/updates-*.json apiv2/cache.json
+          if git diff --cached --quiet; then exit 0; fi
+          git -c commit.gpgsign=false commit -m 'chore(release): update version metadata from published release'
+          git push origin HEAD:main
