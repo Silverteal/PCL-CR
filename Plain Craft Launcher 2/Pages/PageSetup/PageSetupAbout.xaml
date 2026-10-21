@@ -24,6 +24,7 @@
                         <RowDefinition Height="45" />
                         <RowDefinition Height="45" />
                         <RowDefinition Height="45" />
+                        <RowDefinition Height="45" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="40" />
@@ -46,7 +47,7 @@
                         Title="{DynamicResource Setup.About.Community.Name}" />
                     <local:MyListItem
                         x:Name="ItemAboutPcl"
-                        Grid.Row="2"
+                        Grid.Row="3"
                         Grid.Column="1"
                         Margin="-5,0,15,0"
                         Info="{DynamicResource Setup.About.Version.Info}"
@@ -54,7 +55,7 @@
                         Title="{Binding Name}" />
                     <Image
                         x:Name="ImgPCLLogo"
-                        Grid.Row="2"
+                        Grid.Row="3"
                         Margin="3" MouseLeftButtonDown="ImgPCLLogo_Click"
                         Source="/Plain Craft Launcher 2;component/Images/Heads/Logo-CE.png">
                         <Image.Clip>
@@ -84,9 +85,9 @@
                         Grid.Row="0"
                         Grid.Column="2"
                         Height="35"
-                        local:CustomEventService.EventData="https://ifdian.net/a/LTCat"
+                        local:CustomEventService.EventData="https://github.com/LTCatt"
                         local:CustomEventService.EventType="OpenUrl"
-                        Text="{DynamicResource Setup.About.SponsorOriginalAuthor}" />
+                        Text="{DynamicResource Setup.About.GitHubHome}" />
                     <local:MyButton
                         Grid.Row="1"
                         Grid.Column="2"
@@ -95,12 +96,30 @@
                         local:CustomEventService.EventType="OpenUrl"
                         Text="{DynamicResource Setup.About.GitHubHome}" />
                     <local:MyButton
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Height="35"
+                        local:CustomEventService.EventData="https://github.com/StillPCL/PCL-CE"
+                        local:CustomEventService.EventType="OpenUrl"
+                        Text="{DynamicResource Setup.About.GitHubHome}" />
+                    <local:MyListItem
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="-5,0,15,0"
+                        Info="{DynamicResource Setup.About.Midstream.Info}"
+                        IsHitTestVisible="False"
+                        Title="PCL-CE" />
+                    <Image
+                        Grid.Row="2"
+                        Margin="3"
+                        Source="/Plain Craft Launcher 2;component/Images/Heads/Logo-CE.png" />
+                    <local:MyButton
                         Grid.Row="2"
                         Grid.Column="2"
                         Height="35"
-                        local:CustomEventService.EventData="https://github.com/PCL-Community/PCL2-CE"
+                        local:CustomEventService.EventData="https://github.com/PCL-Community/PCL-CE"
                         local:CustomEventService.EventType="OpenUrl"
-                        Text="{DynamicResource Setup.About.SourceCode}" />
+                        Text="{DynamicResource Setup.About.GitHubHome}" />
                 </Grid>
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="{DynamicResource Setup.About.SpecialThanks.Title}">
@@ -375,7 +394,7 @@
                         <local:MyButton
                             Margin="0,0,20,0"
                             ColorType="Highlight"
-                            local:CustomEventService.EventData="https://github.com/PCL-Community/PCL2-CE"
+                            local:CustomEventService.EventData="{Binding Version.BaseName, StringFormat='https://github.com/StillPCL/PCL-CE/tree/v{0}'}"
                             local:CustomEventService.EventType="OpenUrl"
                             Padding="13,0"
                             Text="{DynamicResource Setup.About.Legal.CommunitySource}" />
