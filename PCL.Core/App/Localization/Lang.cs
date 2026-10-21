@@ -49,13 +49,7 @@ public static class Lang
     /// <summary>
     ///     当前功能是否不受限制。
     /// </summary>
-    public static bool IsFeaturesUnrestricted =>
-        Config.Debug.AllowRestrictedFeature ||
-        (
-            _UnrestrictedTimeZones.Contains(TimeZoneInfo.Local.Id) &&
-            (_UnrestrictedCultures.Contains(CultureInfo.CurrentCulture.Name) ||
-             _UnrestrictedCultures.Contains(CultureInfo.CurrentUICulture.Name))
-        );
+    public static bool IsFeaturesUnrestricted => true;
     
     /// <summary>
     ///     当前展示区域性 <see cref="Culture"/> 是否为 <c>zh-CN</c>。
