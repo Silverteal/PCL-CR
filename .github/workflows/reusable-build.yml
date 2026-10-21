@@ -12,6 +12,10 @@ on:
       architecture:
         required: true
         type: string
+      ref:
+        description: 'Commit or ref to build (defaults to the triggering commit)'
+        required: false
+        type: string
 
 jobs:
   build:
@@ -23,11 +27,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref || github.sha }}
 
       - name: Set Describe
         run: |
           describe=`git describe --tags --always`
           echo "describe=$describe" >> $GITHUB_ENV
+          echo "PCL_GITHUB_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
@@ -44,7 +51,6 @@ jobs:
           PCL_NAID_CLIENT_SECRET: ${{ secrets.NAID_CLIENT_SECRET }}
           PCL_LINK_SERVER_ROOT: ${{ secrets.LINK_SERVER_ROOTS }}
           PCL_LOBBY_DEFAULT_SECRET: ${{ secrets.LOBBY_DEFAULT_SECRET }}
-          PCL_GITHUB_SHA: ${{ github.sha }}
         run: |
           dotnet publish "Plain Craft Launcher 2/Plain Craft Launcher 2.csproj" \
           -p:Configuration=${{ inputs.configuration }} -p:Platform=${{ inputs.architecture }} \
