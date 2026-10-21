@@ -19,9 +19,52 @@ on:
         description: 'Version to release (e.g., 2.14.2)'
         required: true
         type: string
+      update_version:
+        description: 'Update and commit source version fields (branches only)'
+        type: boolean
+        default: false
+      version_code:
+        description: 'Internal version code (blank: increment when updating source)'
+        type: string
+      update_server:
+        description: 'Update Server version metadata after publishing'
+        type: boolean
+        default: true
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.version.outputs.sha }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+      - name: Check Server update credentials
+        if: ${{ inputs.update_server }}
+        env:
+          SERVER_UPDATE_TOKEN: ${{ secrets.SERVER_UPDATE_TOKEN }}
+        run: |
+          if [ -z "$SERVER_UPDATE_TOKEN" ]; then
+            echo 'Configure SERVER_UPDATE_TOKEN or disable the Server update option' >&2
+            exit 1
+          fi
+      - name: Prepare source version
+        id: version
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+          CONFIGURATION: ${{ inputs.configuration }}
+          VERSION_CODE: ${{ inputs.version_code }}
+          UPDATE_VERSION: ${{ inputs.update_version }}
+        run: bash .github/scripts/prepare-release.sh
+
   build:
+    needs: prepare
     strategy:
       matrix:
         include:
@@ -35,23 +78,36 @@ jobs:
     with:
       configuration: ${{ matrix.configuration }}
       architecture: ${{ matrix.architecture }}
+      ref: ${{ needs.prepare.outputs.sha }}
     secrets: inherit
 
   changelog:
+    needs: prepare
     runs-on: ubuntu-latest
     steps:
       - name: Checkout all
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          ref: ${{ needs.prepare.outputs.sha }}
 
       - name: Install git-cliff
         uses: taiki-e/install-action@e407f7bafb71fd004bc5c2da3032e5470cbb6ef0 # v2.87.24
         with:
           tool: git-cliff
 
-      - name: Create local release tag
-        run: git tag -f "v${{ inputs.version }}"
+      - name: Create or replace release tag
+        env:
+          RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          tag="v$RELEASE_VERSION"
+          git check-ref-format "refs/tags/$tag"
+          if [ "$GITHUB_REF_TYPE" = tag ] && [ "$GITHUB_REF_NAME" != "$tag" ]; then
+            echo "Release version must match the selected tag" >&2
+            exit 1
+          fi
+          git -c tag.gpgSign=false tag -f "$tag" HEAD
+          git push origin "+refs/tags/$tag:refs/tags/$tag"
 
       - name: Generate changelog
         run: git-cliff --latest -o CHANGELOG.md
@@ -62,15 +118,16 @@ jobs:
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           draft: true
-          tag_name: v${{ inputs.version }}
-          name: Release ${{ inputs.version }}
+          tag_name: v${{ needs.prepare.outputs.version }}
+          name: Release ${{ needs.prepare.outputs.version }}
+          target_commitish: ${{ needs.prepare.outputs.sha }}
           body_path: CHANGELOG.md
           prerelease: ${{ inputs.configuration == 'Beta' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   rename_and_release:
-    needs: [build, changelog]
+    needs: [prepare, build, changelog]
     permissions:
       actions: read
       contents: write
@@ -99,44 +156,38 @@ jobs:
         with:
           inputs: PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe
           verify: true
-          verify-cert-identity: https://github.com/PCL-Community/PCL-CE/.github/workflows/release-publish.yml@refs/heads/dev
+          verify-cert-identity: ${{ github.server_url }}/${{ github.repository }}/.github/workflows/release-publish.yml@${{ github.ref }}
           verify-oidc-issuer: https://token.actions.githubusercontent.com
+
+      - name: Package full update
+        run: zip "PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.zip" "PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe"
 
       - name: Upload binary and signature to Release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           draft: true
-          tag_name: v${{ inputs.version }}
+          tag_name: v${{ needs.prepare.outputs.version }}
           files: |
             PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe
             PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe.sigstore.json
+            PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish_draft:
-    needs: [rename_and_release]
+    needs: [prepare, rename_and_release]
     runs-on: ubuntu-latest
     steps:
       - name: Publish Draft
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
-          tag_name: v${{ inputs.version }}
+          tag_name: v${{ needs.prepare.outputs.version }}
 
-      - name: Trigger MirrorChyanUploading
-        run: |
-          MRC_CHANNEL="stable"
-          if [ "${{ inputs.configuration }}" = "Beta" ]; then
-            MRC_CHANNEL="beta"
-          fi
-
-          for arch in x64 arm64; do
-            gh workflow run --repo $GITHUB_REPOSITORY mirrorchyan_uploading.yml -f channel=$MRC_CHANNEL -f arch=$arch
-          done
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Trigger MirrorChyanReleaseNote
-        run: |
-          gh workflow run --repo $GITHUB_REPOSITORY mirrorchyan_release_note.yml
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  update_server:
+    needs: [prepare, publish_draft]
+    if: ${{ inputs.update_server }}
+    uses: ./.github/workflows/update-server.yml
+    with:
+      tag: v${{ needs.prepare.outputs.version }}
+    secrets:
+      SERVER_UPDATE_TOKEN: ${{ secrets.SERVER_UPDATE_TOKEN }}
