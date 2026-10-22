@@ -1,10 +1,10 @@
 {
   "name": "PCL-CE R",
   "version": {
-    "base": "2.15.1",
+    "base": "2.15.2",
     "upstream": "2.12.1",
     "suffix": "",
-    "code": 524
+    "code": 526
   },
   "licenses": [
     {
