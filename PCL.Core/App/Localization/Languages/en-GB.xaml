@@ -26,7 +26,7 @@
     <sys:String x:Key="Application.EnvironmentWarning.TempFolder">- PCL CE is running from a temporary folder. Please extract PCL CE from the compressed file before using it, otherwise game saves or settings may be lost.</sys:String>
     <sys:String x:Key="Application.EnvironmentWarning.Title">Environment warning</sys:String>
     <sys:String x:Key="Application.EnvironmentWarning.WindowsVersion">- The Windows version does not meet the recommended requirement. Windows 10 1809 or later is recommended. Consider upgrading Windows.</sys:String>
-    <sys:String x:Key="Application.InitializationError.Path">PCL CE path: {0}</sys:String>
+    <sys:String x:Key="Application.InitializationError.Path">PCL-CE R path: {0}</sys:String>
     <sys:String x:Key="Application.InitializationError.PathUnavailable">Unable to obtain</sys:String>
     <sys:String x:Key="Application.InitializationError.Title">PCL CE initialisation error</sys:String>
     <sys:String x:Key="Application.Loader.Error.OperationFailed">A task loading operation failed. See the details below.</sys:String>
@@ -2458,7 +2458,7 @@
 
     <!-- Setup.About -->
 
-    <sys:String x:Key="Setup.About.Community.Info">The development team of Plain Craft Launcher Community Edition!</sys:String>
+    <sys:String x:Key="Setup.About.Community.Info">PCL-CE development team</sys:String>
     <sys:String x:Key="Setup.About.Community.Name">PCL Community</sys:String>
     <sys:String x:Key="Setup.About.Contributors.Title">Contributors</sys:String>
     <sys:String x:Key="Setup.About.Contributors.ViewMore">View more</sys:String>
@@ -2467,7 +2467,8 @@
     <sys:String x:Key="Setup.About.Licenses.Title">Licences and copyrights</sys:String>
     <sys:String x:Key="Setup.About.Licenses.ViewLicense">Licence document</sys:String>
     <sys:String x:Key="Setup.About.Licenses.ViewWebsite">Source website</sys:String>
-    <sys:String x:Key="Setup.About.OriginalAuthor.Info">The original author of Plain Craft Launcher!</sys:String>
+    <sys:String x:Key="Setup.About.Midstream.Info">Intermediate upstream version on which PCL-CE R is based.</sys:String>
+    <sys:String x:Key="Setup.About.OriginalAuthor.Info">Original author of PCL</sys:String>
     <sys:String x:Key="Setup.About.OriginalAuthor.Name">LTCat (龙腾猫跃)</sys:String>
     <sys:String x:Key="Setup.About.SourceCode">Source code</sys:String>
     <sys:String x:Key="Setup.About.SponsorOriginalAuthor">Sponsor original author</sys:String>
@@ -2511,8 +2512,8 @@
     <!-- Setup.About.Legal -->
 
     <sys:String x:Key="Setup.About.Legal.CommunityLobbyPrivacy">Community lobby privacy policy</sys:String>
-    <sys:String x:Key="Setup.About.Legal.CommunitySource">PCL CE source code</sys:String>
-    <sys:String x:Key="Setup.About.Legal.CopyrightText">Copyright © PCL Community &amp; LTCat (龙腾猫跃) 2026.&#xD;NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</sys:String>
+    <sys:String x:Key="Setup.About.Legal.CommunitySource">PCL-CE R source code</sys:String>
+    <sys:String x:Key="Setup.About.Legal.CopyrightText">PCL-CE R&#xD;Copyright &#xA9; 2026 PCL-CE R Authors.&#xD;Copyright © PCL Community &amp; LTCat (龙腾猫跃) 2026.&#xD;NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</sys:String>
     <sys:String x:Key="Setup.About.Legal.NatayarkTerms">Natayark OpenID ToS</sys:String>
     <sys:String x:Key="Setup.About.Legal.OtherInfo">Other information</sys:String>
     <sys:String x:Key="Setup.About.Legal.PrivacyNotice">Privacy statement</sys:String>

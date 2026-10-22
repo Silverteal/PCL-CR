@@ -26,7 +26,7 @@
     <sys:String x:Key="Application.EnvironmentWarning.TempFolder">- PCL CE 正在临时目录运行，请将 PCL CE 从压缩包中解压之后再使用，否则可能导致游戏存档或设置丢失</sys:String>
     <sys:String x:Key="Application.EnvironmentWarning.Title">环境警告</sys:String>
     <sys:String x:Key="Application.EnvironmentWarning.WindowsVersion">- Windows 版本不满足推荐要求，推荐至少 Windows 10 1809，建议考虑升级 Windows 系统</sys:String>
-    <sys:String x:Key="Application.InitializationError.Path">PCL CE 所在路径：{0}</sys:String>
+    <sys:String x:Key="Application.InitializationError.Path">PCL-CE R 所在路径：{0}</sys:String>
     <sys:String x:Key="Application.InitializationError.PathUnavailable">获取失败</sys:String>
     <sys:String x:Key="Application.InitializationError.Title">PCL CE 初始化错误</sys:String>
     <sys:String x:Key="Application.Loader.Error.OperationFailed">任务加载操作失败。请查看错误详情。</sys:String>
@@ -2505,7 +2505,7 @@
 
     <!-- Setup.About -->
 
-    <sys:String x:Key="Setup.About.Community.Info">Plain Craft Launcher Community Edition 的开发团队！</sys:String>
+    <sys:String x:Key="Setup.About.Community.Info">PCL-CE 开发团队</sys:String>
     <sys:String x:Key="Setup.About.Community.Name">PCL Community</sys:String>
     <sys:String x:Key="Setup.About.Contributors.Title">贡献者们</sys:String>
     <sys:String x:Key="Setup.About.Contributors.ViewMore">查看更多</sys:String>
@@ -2514,7 +2514,8 @@
     <sys:String x:Key="Setup.About.Licenses.Title">许可与版权声明</sys:String>
     <sys:String x:Key="Setup.About.Licenses.ViewLicense">查看许可文档</sys:String>
     <sys:String x:Key="Setup.About.Licenses.ViewWebsite">查看来源网站</sys:String>
-    <sys:String x:Key="Setup.About.OriginalAuthor.Info">Plain Craft Launcher 的原作者！</sys:String>
+    <sys:String x:Key="Setup.About.Midstream.Info">中游版本，PCL-CE R 基于此版本维护。</sys:String>
+    <sys:String x:Key="Setup.About.OriginalAuthor.Info">PCL 原作者</sys:String>
     <sys:String x:Key="Setup.About.OriginalAuthor.Name">龙腾猫跃</sys:String>
     <sys:String x:Key="Setup.About.SourceCode">查看源代码</sys:String>
     <sys:String x:Key="Setup.About.SponsorOriginalAuthor">赞助原作者</sys:String>
@@ -2558,8 +2559,8 @@
     <!-- Setup.About.Legal -->
 
     <sys:String x:Key="Setup.About.Legal.CommunityLobbyPrivacy">PCL CE 联机大厅隐私政策</sys:String>
-    <sys:String x:Key="Setup.About.Legal.CommunitySource">PCL CE 开源代码</sys:String>
-    <sys:String x:Key="Setup.About.Legal.CopyrightText">Copyright © 2026 PCL Community &amp; 龙腾猫跃.&#xD;非 MINECRAFT 官方产品。未经 MOJANG 或 MICROSOFT 批准，也不与 MOJANG 或 MICROSOFT 关联。</sys:String>
+    <sys:String x:Key="Setup.About.Legal.CommunitySource">PCL-CE R 开源代码</sys:String>
+    <sys:String x:Key="Setup.About.Legal.CopyrightText">PCL-CE R&#xD;Copyright &#xA9; 2026 PCL-CE R Authors.&#xD;Copyright © 2026 PCL Community &amp; 龙腾猫跃.&#xD;非 MINECRAFT 官方产品。未经 MOJANG 或 MICROSOFT 批准，也不与 MOJANG 或 MICROSOFT 关联。</sys:String>
     <sys:String x:Key="Setup.About.Legal.NatayarkTerms">Natayark OpenID 服务条款</sys:String>
     <sys:String x:Key="Setup.About.Legal.OtherInfo">其他信息</sys:String>
     <sys:String x:Key="Setup.About.Legal.PrivacyNotice">隐私说明</sys:String>
